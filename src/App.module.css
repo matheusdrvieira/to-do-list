@@ -1,0 +1,67 @@
+.container main{
+    padding: 0 22rem;
+}
+
+.wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: -1.6875rem;
+}
+
+.wrapper button{
+    width: 5.625rem;
+    font-size: 0.875rem;
+}
+
+.infoWrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4rem;
+}
+
+.infoWrapper p{
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.0625rem;
+    color: var(--blue-500);
+}
+
+.infoWrapper span{
+    border-radius: 62.4375rem;
+    padding: 2px 0.5rem;
+    font-size: 0.75rem;
+    color: var(--gray-100);
+    background: var(--gray-400);
+}
+.section{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    margin-top: 1.5rem;
+    padding: 4rem 0;
+
+    border-top: 1px solid var(--gray-400);
+    border-radius: 0.5rem;
+}
+
+.section img{
+    margin-bottom: 1rem;
+}
+
+.section h2{
+    font-family: 'Inter';
+    font-style: normal;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--gray-300);
+}
+
+.section h2 strong{
+    font-weight: bold;
+}
