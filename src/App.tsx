@@ -1,38 +1,77 @@
 import { Header } from "./components/Header"
 import { Input } from "./components/Input";
 import { Button } from "./components/Button";
-import { Questions } from "./components/Questions";
+import { Tasks, TaskProps } from "./components/Tasks";
 import { RiAddCircleLine } from "react-icons/ri";
+import { useEffect, useState } from "react";
 import clipboard from "./assets/clipboard.png";
 import styles from "./App.module.css"
 import "./global.css"
 
-import { useState } from "react";
-
 export function App() {
-  const [showSection, setShowSection] = useState<boolean>(true);
+  const [handleTasks, setHandleTasks] = useState<string[]>([]);
+  const [tasks, setTasks] = useState<TaskProps[]>([]);
+  const storedTasks = localStorage.getItem("@setTasks");
 
-  const handleToggleSection = () => {
-    setShowSection(!showSection);
+  const handleSavedTasks = () => {
+    const savedTasks = JSON.parse(localStorage.getItem("@setTasks") || "[]");
+
+    if (handleTasks.length === 0) {
+      return;
+    }
+
+    const updatedTasks = [
+      ...savedTasks,
+      ...handleTasks.map((task) => ({ text: task, completed: false, id: Date.now() }))
+    ];
+
+    localStorage.setItem("@setTasks", JSON.stringify(updatedTasks));
+    setHandleTasks([]);
   };
+
+  useEffect(() => {
+    async function fetchTasks() {
+      if (storedTasks) {
+        setTasks(JSON.parse(storedTasks));
+      }
+    }
+
+    fetchTasks();
+  }, [storedTasks]);
+
+  const completedTasksCount = tasks.filter(task => task.completed).length;
 
   return (
     <div className={styles.container}>
       <Header />
       <main>
         <div className={styles.wrapper}>
-          <Input type="text" placeholder="Adicione uma nova tarefa" />
+          <Input
+            type="text"
+            placeholder="Adicione uma nova tarefa"
+            value={handleTasks}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setHandleTasks([e.target.value])}
+          />
           <Button
             title="Criar"
             icon={<RiAddCircleLine size={15} />}
-            onClick={handleToggleSection}
+            onClick={handleSavedTasks}
           />
         </div>
         <div className={styles.infoWrapper}>
-          <p>Tarefas criadas <span>0</span></p><p>Concluídas <span>0</span></p>
+          <p>
+            Tarefas criadas{' '}
+            <span>{tasks.length}</span>
+          </p>
+          <p>
+            Concluídas{' '}
+            <span>
+              {completedTasksCount}
+            </span>
+          </p>
         </div>
 
-        {showSection ?
+        {tasks.length === 0 ?
           <section className={styles.section}>
             <img src={clipboard} alt="prancheta" />
             <h2>
@@ -42,10 +81,16 @@ export function App() {
             </h2>
           </section> :
           <section className={styles.section}>
-            <Questions quest="Integer urna interdum massa libero auctor neque turpis turpis semper. Duis vel sed fames integer." />
-            <Questions quest="Integer urna interdum massa libero auctor neque turpis turpis semper. Duis vel sed fames integer." />
-            <Questions quest="Integer urna interdum massa libero auctor neque turpis turpis semper. Duis vel sed fames integer." />
-            <Questions quest="Integer urna interdum massa libero auctor neque turpis turpis semper. Duis vel sed fames integer." />
+            {
+              tasks.map(task => (
+                <Tasks
+                  key={task.id}
+                  id={task.id}
+                  text={task.text}
+                  completed={task.completed}
+                />
+              ))
+            }
           </section>}
       </main>
     </div>
