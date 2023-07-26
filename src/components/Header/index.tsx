@@ -1,7 +1,6 @@
 import rocket from "../../assets/rocket.png";
 import styles from "./index.module.css";
 
-
 export function Header() {
     return (
         <header className={styles.header}>

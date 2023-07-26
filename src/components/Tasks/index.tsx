@@ -1,35 +1,33 @@
 import styles from "./index.module.css";
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useContext } from 'react';
 import { HiOutlineTrash } from "react-icons/hi";
-
-export interface TaskProps {
-    id: number
-    text: string;
-    completed: boolean;
-};
+import { Context } from "../../App";
+import { TaskProps } from "../../interfaces";
 
 export function Tasks(props: TaskProps) {
+    const { tasks, setTasks } = useContext(Context);
     const [checked, setChecked] = useState<boolean>(props.completed);
-    const storedTasks = JSON.parse(localStorage.getItem("@setTasks") || "[]");
 
     const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
         setChecked(event.target.checked);
-        const updatedTasks = storedTasks.map((task: TaskProps) => {
-            if (task.text === props.text) {
+        const updatedTasks = tasks.map((task: TaskProps) => {
+            if (task.id === props.id) {
                 return { ...task, completed: event.target.checked };
             }
             return task;
         });
 
-        localStorage.setItem("@setTasks", JSON.stringify(updatedTasks));
+        setTasks(updatedTasks);
+        localStorage.setItem("@setTasks", JSON.stringify({ tasks: updatedTasks }));
     };
 
     const handleDeletedTask = () => {
-        const updatedTasks = storedTasks.filter(
+        const updatedTasks = tasks.filter(
             (task: TaskProps) => task.id !== props.id
         );
 
-        localStorage.setItem("@setTasks", JSON.stringify(updatedTasks));
+        localStorage.setItem("@setTasks", JSON.stringify({ tasks: updatedTasks }));
+        setTasks(updatedTasks);
         alert("Tarefa Excluída")
     };
 

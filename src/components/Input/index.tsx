@@ -1,14 +1,11 @@
+import { InputProps } from "../../interfaces";
 import styles from "./index.module.css";
 
-export function Input(props: any) {
+export function Input(props: InputProps) {
     return (
         <input
             className={styles.input}
-            type={props.type}
-            name={props.name}
-            id={props.id}
-            placeholder={props.placeholder}
-            required {...props}
+            {...props}
         />
     )
 }
